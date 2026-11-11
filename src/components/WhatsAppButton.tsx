@@ -2,11 +2,25 @@ import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { MessageCircle, X } from 'lucide-react'
 
+// Declaração de tipagem para o dataLayer do Google Tag Manager
+declare global {
+    interface Window {
+        dataLayer: Record<string, unknown>[]
+    }
+}
+
+interface Contact {
+    name: string
+    number: string
+    url: string
+    label: string
+}
+
 export default function WhatsAppButton() {
     const [isOpen, setIsOpen] = useState(false)
     const menuRef = useRef<HTMLDivElement>(null)
 
-    const contacts = [
+    const contacts: Contact[] = [
         {
             name: 'Luis',
             number: '(11) 99637-3477',
@@ -20,6 +34,18 @@ export default function WhatsAppButton() {
             label: 'Atendimento / Oficina'
         }
     ]
+
+    const handleContactClick = (contact: Contact) => {
+        // eslint-disable-next-line react-hooks/immutability
+        window.dataLayer = window.dataLayer || []
+        window.dataLayer.push({
+            event: 'whatsapp_click',
+            contact_name: contact.name,
+            contact_number: contact.number,
+            link_url: contact.url
+        })
+        setIsOpen(false)
+    }
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -55,7 +81,7 @@ export default function WhatsAppButton() {
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/5 hover:border-gold-racing/50 hover:bg-gold-racing/10 transition-all group"
-                                    onClick={() => setIsOpen(false)}
+                                    onClick={() => handleContactClick(contact)}
                                 >
                                     <div className="w-10 h-10 rounded-full bg-[#25D366]/20 flex items-center justify-center text-[#25D366] group-hover:bg-[#25D366] group-hover:text-white transition-all">
                                         <MessageCircle size={20} />
