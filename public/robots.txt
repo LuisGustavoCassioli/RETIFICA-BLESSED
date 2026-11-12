@@ -19,4 +19,4 @@ User-agent: Google-Extended
 Allow: /
 
 # Sitemap Location
-Sitemap: https://retifica-blessed.vercel.app/sitemap.xml
+Sitemap: https://www.retificablessed.com.br/sitemap.xml
